@@ -54,4 +54,21 @@ class ProjectsTest extends TestCase
             ->assertSee($project->title)
             ->assertSee($project->description);
     }
+
+    /** @test */
+    public function a_project_requires_an_owner()
+    {
+        //$attributes = \App\Models\Project::factory()->raw(['owner_id' => null]);
+
+
+
+        $this->withoutExceptionHandling();
+
+        $attributes = \App\Models\Project::factory()->raw();
+
+        $this->post('/projects', $attributes)->assertRedirect('login');
+
+
+        //$this->post('/projects', $attributes)->assertSessionHasErrors('owner_id');
+    }
 }
