@@ -11,9 +11,19 @@ class ProjectsTest extends TestCase
     use WithFaker, RefreshDatabase;
 
     /** @test */
+    public function only_authenticated_users_can_create_project()
+    {
+        $attributes = \App\Models\Project::factory()->raw();
+
+        $this->post('/projects', $attributes)->assertRedirect('login');
+    }
+
+    /** @test */
     public function a_user_can_create_a_project(): void
     {
         $this->withoutExceptionHandling();
+
+        $this->actingAs(\App\Models\User::factory()->create());
 
         $attributes = [
             'title' => $this->faker->sentence,
@@ -30,6 +40,8 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_title()
     {
+        $this->actingAs(\App\Models\User::factory()->create());
+
         $attributes = \App\Models\Project::factory()->raw(['title' => '']);
 
         $this->post('/projects', $attributes)->assertSessionHasErrors('title');
@@ -38,6 +50,8 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_description()
     {
+        $this->actingAs(\App\Models\User::factory()->create());
+
         $attributes = \App\Models\Project::factory()->raw(['description' => '']);
 
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
@@ -53,22 +67,5 @@ class ProjectsTest extends TestCase
         $this->get($project->path())
             ->assertSee($project->title)
             ->assertSee($project->description);
-    }
-
-    /** @test */
-    public function a_project_requires_an_owner()
-    {
-        //$attributes = \App\Models\Project::factory()->raw(['owner_id' => null]);
-
-
-
-        $this->withoutExceptionHandling();
-
-        $attributes = \App\Models\Project::factory()->raw();
-
-        $this->post('/projects', $attributes)->assertRedirect('login');
-
-
-        //$this->post('/projects', $attributes)->assertSessionHasErrors('owner_id');
     }
 }
