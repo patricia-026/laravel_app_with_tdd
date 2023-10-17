@@ -15,23 +15,24 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
-<body>
+<body class="bg-grey-light">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand text-3xl" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
+        <nav class="bg-white">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center py-2">
+                    <a class="navbar-brand text-3xl" href="{{ url('/') }}">
+                        {{ config('app.name', 'Laravel') }}
+                    </a>
 
-                <button>Dropdown</button>
-
+                    <button>Dropdown</button>
+                </div>
             </div>
         </nav>
 
-        <main class="container py-4">
+        <main class="container mx-auto px-4 py-4">
             @yield('content')
         </main>
     </div>
