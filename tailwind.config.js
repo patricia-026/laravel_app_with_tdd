@@ -6,14 +6,18 @@ export default {
     "./resources/**/*.vue",
   ],
   theme: {
-    boxShadow: {
-      default: '0 0 5px 0 rgba(0, 0, 0, 0.08)',
-    },
     extend: {
+      boxShadow: {
+        DEFAULT: '0 0 5px 0 rgba(0, 0, 0, 0.08)',
+      },
       colors: {
         grey: {
           light: "#F5F6F9",
-        }
+        },
+        blue: {
+          500: '#47cdff',
+          400: '#8ae2fe',
+        },
       },
     },
   },
