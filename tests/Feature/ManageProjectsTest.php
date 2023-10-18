@@ -26,7 +26,7 @@ class ManageProjectsTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $this->actingAs(\App\Models\User::factory()->create());
+        $this->signIn();
 
         $this->get('/projects/create')->assertStatus(200);
 
@@ -45,7 +45,7 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_title()
     {
-        $this->actingAs(\App\Models\User::factory()->create());
+        $this->signIn();
 
         $attributes = \App\Models\Project::factory()->raw(['title' => '']);
 
@@ -55,7 +55,7 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_description()
     {
-        $this->actingAs(\App\Models\User::factory()->create());
+        $this->signIn();
 
         $attributes = \App\Models\Project::factory()->raw(['description' => '']);
 
@@ -65,7 +65,7 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function a_user_can_view_their_project()
     {
-        $this->be(\App\Models\User::factory()->create());
+        $this->signIn();
 
         $this->withoutExceptionHandling();
 
@@ -79,7 +79,7 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function an_authenticated_user_cannot_view_the_projects_of_others()
     {
-        $this->be(\App\Models\User::factory()->create());
+        $this->signIn();
 
         $project = \App\Models\Project::factory()->create();
 
