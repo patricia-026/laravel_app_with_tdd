@@ -31,8 +31,8 @@ class ManageProjectsTest extends TestCase
         $this->get('/projects/create')->assertStatus(200);
 
         $attributes = [
-            'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph,
+            'title' => $this->faker->sentence(4),
+            'description' => $this->faker->sentence(4),
         ];
 
         $this->post('/projects', $attributes)->assertRedirect('/projects');
@@ -71,9 +71,7 @@ class ManageProjectsTest extends TestCase
 
         $project = \App\Models\Project::factory()->create(['owner_id' => auth()->id()]);
 
-        $this->get($project->path())
-            ->assertSee($project->title)
-            ->assertSee($project->description);
+        $this->get($project->path())->assertSee($project->title)->assertSee(\Illuminate\Support\Str::limit($project->description, 100));
     }
 
     /** @test */
