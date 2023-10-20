@@ -14,7 +14,7 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function guests_cannot_manage_project()
     {
-        $project = \App\Models\Project::factory()->create();
+        $project = Project::factory()->create();
 
         $this->get('/projects')->assertRedirect('login');
         $this->get('/projects/create')->assertRedirect('login');
@@ -34,6 +34,7 @@ class ManageProjectsTest extends TestCase
         $attributes = [
             'title' => $this->faker->sentence(4),
             'description' => $this->faker->sentence(4),
+            'notes' => 'General notes here.',
         ];
 
         $response = $this->post('/projects', $attributes);
@@ -44,7 +45,26 @@ class ManageProjectsTest extends TestCase
 
         $this->assertDatabaseHas('projects', $attributes);
 
-        $this->get('/projects')->assertSee($attributes['title']);
+        $this->get($project->path())
+            ->assertSee($attributes['title'])
+            ->assertSee($attributes['description'])
+            ->assertSee($attributes['notes']);
+    }
+
+    /** @test */
+    public function a_user_can_update_a_project(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn();
+
+        $project = Project::factory()->create(['owner_id' => auth()->id()]);
+
+        $this->patch($project->path(), [
+            'notes' => 'changed'
+        ])->assertRedirect($project->path());
+
+        $this->assertDatabaseHas('projects', ['notes' => 'changed']);
     }
 
     /** @test */
@@ -52,7 +72,7 @@ class ManageProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $attributes = \App\Models\Project::factory()->raw(['title' => '']);
+        $attributes = Project::factory()->raw(['title' => '']);
 
         $this->post('/projects', $attributes)->assertSessionHasErrors('title');
     }
@@ -62,7 +82,7 @@ class ManageProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $attributes = \App\Models\Project::factory()->raw(['description' => '']);
+        $attributes = Project::factory()->raw(['description' => '']);
 
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
     }
@@ -74,7 +94,7 @@ class ManageProjectsTest extends TestCase
 
         $this->withoutExceptionHandling();
 
-        $project = \App\Models\Project::factory()->create(['owner_id' => auth()->id()]);
+        $project = Project::factory()->create(['owner_id' => auth()->id()]);
 
         $this->get($project->path())->assertSee($project->title)->assertSee(\Illuminate\Support\Str::limit($project->description, 100));
     }
@@ -84,8 +104,18 @@ class ManageProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $project = \App\Models\Project::factory()->create();
+        $project = Project::factory()->create();
 
         $this->get($project->path())->assertStatus(403);
+    }
+
+    /** @test */
+    public function an_authenticated_user_cannot_update_the_projects_of_others()
+    {
+        $this->signIn();
+
+        $project = Project::factory()->create();
+
+        $this->patch($project->path(), [])->assertStatus(403);
     }
 }

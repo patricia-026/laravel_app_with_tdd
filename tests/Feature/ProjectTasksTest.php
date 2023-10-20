@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,7 +17,7 @@ class ProjectTasksTest extends TestCase
     {
         $this->signIn();
 
-        $project = \App\Models\Project::factory()->create(['owner_id' => auth()->id()]);
+        $project = Project::factory()->create(['owner_id' => auth()->id()]);
 
         $this->post($project->path() . '/tasks', ['body' => 'Test task']);
 
@@ -28,9 +30,9 @@ class ProjectTasksTest extends TestCase
     {
         $this->signIn();
 
-        $project = \App\Models\Project::factory()->create(['owner_id' => auth()->id()]);
+        $project = Project::factory()->create(['owner_id' => auth()->id()]);
 
-        $attributes = \App\Models\Task::factory()->raw(['body' => '']);
+        $attributes = Task::factory()->raw(['body' => '']);
 
         $this->post($project->path() . '/tasks', $attributes)->assertSessionHasErrors('body');
     }
@@ -38,7 +40,7 @@ class ProjectTasksTest extends TestCase
     /** @test */
     public function guests_cannot_add_tasks_to_projects()
     {
-        $project = \App\Models\Project::factory()->create();
+        $project = Project::factory()->create();
 
         $this->post($project->path() . '/tasks')->assertRedirect('login');
     }
@@ -48,7 +50,7 @@ class ProjectTasksTest extends TestCase
     {
         $this->signIn();
 
-        $project = \App\Models\Project::factory()->create();
+        $project = Project::factory()->create();
 
         $this->post($project->path() . '/tasks', ['body' => 'Test task'])
             ->assertStatus(403);
@@ -64,7 +66,7 @@ class ProjectTasksTest extends TestCase
         $this->signIn();
 
         $project = auth()->user()->projects()->create(
-            \App\Models\Project::factory()->raw()
+            Project::factory()->raw()
         );
 
         $task = $project->addTask('test task');
@@ -93,7 +95,7 @@ class ProjectTasksTest extends TestCase
     {
         $this->signIn();
 
-        $project = \App\Models\Project::factory()->create();
+        $project = Project::factory()->create();
 
         $task = $project->addTask('test task');
 
