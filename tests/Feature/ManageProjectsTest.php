@@ -48,6 +48,21 @@ class ManageProjectsTest extends TestCase
             ->assertSee($attributes['description'])
             ->assertSee($attributes['notes']);
     }
+
+    /** @test */
+    public function a_user_can_see_all_projects_they_have_been_invited_to_on_their_dashboard()
+    {
+        // Given we're signed in
+        // And we've been invited to a project that was not created by us
+        $project = tap(ProjectFactory::create())->invite($this->signIn());
+
+        // When I visit my dashboard
+        // I should see that project
+        $this->get('/projects')
+            ->assertSee($project->title);
+    }
+
+
     /** @test */
     public function unauthorized_users_cannot_delete_a_project()
     {
