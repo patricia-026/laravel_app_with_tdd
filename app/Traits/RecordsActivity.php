@@ -37,7 +37,7 @@ trait RecordsActivity
      * 
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function activity()
+    protected function activity()
     {
         return $this->morphMany(Activity::class, 'subject')->latest();
     }
@@ -47,9 +47,10 @@ trait RecordsActivity
      * 
      * @param string $description
      */
-    public function recordActivity($description)
+    protected function recordActivity($description)
     {
         $this->activity()->create([
+            'user_id' => ($this->project ?? $this)->owner->id,
             'description' => $description,
             'changes' => $this->activityChanges(),
             'project_id' => class_basename($this) === 'Project' ? $this->id : $this->project_id
