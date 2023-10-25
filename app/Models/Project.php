@@ -37,4 +37,17 @@ class Project extends Model
     {
         return $this->hasMany(Activity::class)->latest();
     }
+
+    public function invite(User $user)
+    {
+        return $this->members()->attach($user);
+    }
+
+    public function members()
+    {
+        // is it true that a project can have many members
+        // AND ALSO a member can have many projects
+        // true->pivot table
+        return $this->belongsToMany(User::class, 'project_members');
+    }
 }
