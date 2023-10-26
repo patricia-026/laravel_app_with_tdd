@@ -1,8 +1,8 @@
-@tailwind base;
+/*@tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities;*/
 
-.section {
+/*.section {
     @apply px-4;
 }
 
@@ -14,22 +14,4 @@
 .card {
     @apply bg-card p-5 rounded-lg shadow;
     color: var(--text-default-color);
-}
-
-.theme-light {
-    --page-background-color: #F5F6F9;
-    --button-background-color: #47cdff;
-    --card-background-color: white;
-    --header-background-color: white;
-
-    --text-default-color: black;
-}
-
-.theme-dark {
-    --page-background-color: #17181E;
-    --button-background-color: #59B6F9;
-    --card-background-color: #1F2027;
-    --header-background-color: #1F2027;
-
-    --text-default-color: white;
-}
+}*/
