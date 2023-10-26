@@ -15,11 +15,11 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
-    @vite([/*'resources/css/app.css', */ 'resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
-<body class="theme-light bg-page">
-    <div id="app">
+<body id="app" class="theme-light bg-page">
+    <div {{-- id="app" --}}>
         <nav class="bg-header">
             <div class="container mx-auto section">
                 <div class="flex justify-between items-center py-2">
@@ -45,43 +45,25 @@
                     </h1>
                     <div>
                         <!-- Right Side Of Navbar -->
-                        <ul class="navbar-nav ml-auto">
+                        <div class="flex items-center ml-auto">
                             <!-- Authentication Links -->
                             @guest
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 @if (Route::has('register'))
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                    </li>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 @endif
                             @else
-                                <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="flex items-center text-default no-underline text-sm"
-                                        href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false" v-pre>
-                                        <img width="35" class="rounded-full mr-3"
-                                            src="{{ pravatar_url(Auth::user()->id) }}"
-                                            alt="{{ Auth::user()->name }}'s avatar">
-                                        {{ Auth::user()->name }} <span class="caret"></span>
-                                    </a>
+                                <theme-switcher></theme-switcher>
 
-                                    {{-- <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                         document.getElementById('logout-form').submit();">
-                                            {{ __('Logout') }}
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                        </form>
-                                    </div> --}}
-                                </li>
+                                <a id="navbarDropdown" class="flex items-center text-default no-underline text-sm"
+                                    href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false" v-pre>
+                                    <img width="35" class="rounded-full mr-3" src="{{ pravatar_url(Auth::user()->id) }}"
+                                        alt="{{ Auth::user()->name }}'s avatar">
+                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                </a>
                             @endguest
-                        </ul>
+                        </div>
                     </div>
                 </div>
             </div>
