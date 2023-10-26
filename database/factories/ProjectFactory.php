@@ -22,7 +22,8 @@ class ProjectFactory extends Factory
             'description' => fake()->sentence(4),
             'owner_id' => function () {
                 return User::factory()->create()->id;
-            }
+            },
+            'notes' => 'Foobar notes',
         ];
     }
 }
