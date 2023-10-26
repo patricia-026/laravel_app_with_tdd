@@ -18,7 +18,7 @@
     @vite([/*'resources/css/app.css', */ 'resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
-<body class="theme-dark bg-page">
+<body class="theme-light bg-page">
     <div id="app">
         <nav class="bg-header">
             <div class="container mx-auto section">
@@ -58,12 +58,16 @@
                                 @endif
                             @else
                                 <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <a id="navbarDropdown" class="flex items-center text-default no-underline text-sm"
+                                        href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" v-pre>
+                                        <img width="35" class="rounded-full mr-3"
+                                            src="{{ pravatar_url(Auth::user()->id) }}"
+                                            alt="{{ Auth::user()->name }}'s avatar">
                                         {{ Auth::user()->name }} <span class="caret"></span>
                                     </a>
 
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    {{-- <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                          document.getElementById('logout-form').submit();">
@@ -74,7 +78,7 @@
                                             style="display: none;">
                                             @csrf
                                         </form>
-                                    </div>
+                                    </div> --}}
                                 </li>
                             @endguest
                         </ul>
