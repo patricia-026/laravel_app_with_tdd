@@ -11,5 +11,5 @@ function gravatar_url($email)
 
 function pravatar_url($user_id)
 {
-    return "https://i.pravatar.cc/60?u={{ $user_id }}?";
+    return "https://i.pravatar.cc/60?u={{ $user_id }}";
 }
