@@ -46,10 +46,10 @@
                         class="border-muted-light mb-2 p-2 text-xs block w-full rounded bg-card text-default"
                         placeholder="Task 1"
                         v-for="task in form.tasks"
-                        v-model="task.value">
+                        v-model="task.body">
                     </div>
 
-                    <button class="inline-flex items-center text-xs" @click="addTask()">
+                    <button type="button" class="inline-flex items-center text-xs" @click="addTask()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
                             class="mr-2 text-default">
                             <g fill="none" fill-rule="evenodd" opacity=".307">
@@ -68,7 +68,7 @@
             
 
             <footer class="flex justify-end">
-                <button data-modal-hide="new-project" class="button mr-4 is-outlined">Cancel</button>
+                <button type="button" data-modal-hide="new-project" class="button mr-4 is-outlined">Cancel</button>
                 <button class="button">Create Project</button>
             </footer>
             </form>
@@ -86,7 +86,7 @@ import {reactive, ref} from "vue";
 let form = reactive({
     title : '',
     description: '',
-    tasks : reactive([{value: ''}]),
+    tasks : reactive([{body: ''}]),
 });
 
 let errors = ref({});
@@ -94,7 +94,7 @@ let errors = ref({});
 
 function addTask()
 {
-    (form.tasks).push({value: ''});
+    (form.tasks).push({body: ''});
 }
 
 async function submit()
