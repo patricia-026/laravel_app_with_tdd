@@ -17,14 +17,14 @@
                     <div class="mb-4">
                         <label for="title" class="text-sm block mb-2">Title</label>
                         <input 
-                            :key="errors.title"
+                            :key="form.errors.title"
                             type="text" 
                             id="title"
                             class="border-muted-light p-2 text-xs block w-full rounded bg-card text-default"
-                            :class="errors.title ? 'border-red-500' : 'border-muted-light'"
+                            :class="form.errors.title ? 'border-error' : 'border-muted-light'"
                             v-model="form.title">
 
-                            <span class="text-xs italic text-error" v-if="errors.title" v-text="errors.title[0]"></span>
+                            <span class="text-xs italic text-error" v-if="form.errors.title" v-text="form.errors.title[0]"></span>
                     </div>
 
                     <div class="mb-4">
@@ -32,7 +32,7 @@
                         <textarea id="description" class="border-muted-light p-2 text-xs block w-full rounded bg-card text-default"
                             rows="7" v-model="form.description"></textarea>
 
-                            <span class="text-xs italic text-error" v-if="errors.description" v-text="errors.description[0]"></span>
+                            <span class="text-xs italic text-error" v-if="form.errors.description" v-text="form.errors.description[0]"></span>
                     </div>
 
 
@@ -44,17 +44,17 @@
                         <input
                         type="text"
                         class="border-muted-light mb-2 p-2 text-xs block w-full rounded bg-card text-default"
-                        placeholder="Task 1"
+                        placeholder="New Task"
                         v-for="task in form.tasks"
                         v-model="task.body">
                     </div>
 
                     <button type="button" class="inline-flex items-center text-xs" @click="addTask()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
-                            class="mr-2 text-default">
+                            class="mr-2">
                             <g fill="none" fill-rule="evenodd" opacity=".307">
-                                <path stroke="#000" stroke-opacity=".012" stroke-width="0" d="M-3-3h24v24H-3z"></path>
-                                <path fill="#000"
+                                <path stroke="#fff" stroke-opacity=".012" stroke-width="0" d="M-3-3h24v24H-3z"></path>
+                                <path fill="#fff"
                                     d="M9 0a9 9 0 0 0-9 9c0 4.97 4.02 9 9 9A9 9 0 0 0 9 0zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm1-11H8v3H5v2h3v3h2v-3h3V8h-3V5z">
                                 </path>
                             </g>
@@ -80,33 +80,29 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import {reactive, ref} from "vue";
+import BirdboardForm from './BirdboardForm';
+import { ref } from 'vue';
 
-let form = reactive({
-    title : '',
-    description: '',
-    tasks : reactive([{body: ''}]),
-});
+const form = ref(new BirdboardForm({
+  title: '',
+  description: '',
+  tasks: [{ body: '' }],
+}));
 
-let errors = ref({});
-
-
-function addTask()
-{
-    (form.tasks).push({body: ''});
+function addTask() {
+  form.value.tasks.push({ body: '' });
 }
 
-async function submit()
-{
-    try{
-        let response = await axios.post('/projects', form);
+async function submit() {
+  if (!form.value.tasks[0].body) {
+    delete form.value.originalData.tasks;
+  }
 
-        location = response.data.message;
-    } catch (error) {
-        errors.value = error.response.data.errors;
-    }
-        
+  try {
+    const response = await form.value.submit('/projects');
+    location = response.data.message;
+  } catch (error) {
+    //console.error(error);
+  }
 }
-
 </script>
