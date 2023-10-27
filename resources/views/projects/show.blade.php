@@ -35,7 +35,7 @@
                                 @method('PATCH')
                                 @csrf
 
-                                <div class="flex">
+                                <div class="flex items-center">
                                     <input name="body"
                                         class="bg-card text-default w-full {{ $task->completed ? 'line-through text-muted' : '' }}"
                                         value="{{ $task->body }}">

@@ -48,20 +48,36 @@
                         <div class="flex items-center ml-auto">
                             <!-- Authentication Links -->
                             @guest
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="text-accent mr-4 no-underline hover:underline"
+                                    href="{{ route('login') }}">{{ __('Login') }}</a>
                                 @if (Route::has('register'))
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="text-accent no-underline hover:underline"
+                                        href="{{ route('register') }}">{{ __('Register') }}</a>
                                 @endif
                             @else
                                 <theme-switcher></theme-switcher>
 
-                                <a id="navbarDropdown" class="flex items-center text-default no-underline text-sm"
-                                    href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false" v-pre>
+                                <button id="dropdownDefaultButton"
+                                    class="flex items-center text-default no-underline text-sm"
+                                    data-dropdown-toggle="dropdown" type="button">
                                     <img width="35" class="rounded-full mr-3" src="{{ pravatar_url(Auth::user()->id) }}"
-                                        alt="{{ Auth::user()->name }}'s avatar">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
+                                        alt="{{ Auth::user()->name }}'s avatar"> {{ Auth::user()->name }} <span
+                                        class="caret"></span>
+                                </button>
+
+                                <!-- Dropdown menu -->
+                                <div id="dropdown" class="z-10 hidden bg-card divide-y rounded-lg shadow w-44">
+                                    <ul class="py-2 text-sm text-default" aria-labelledby="dropdownDefaultButton">
+                                        <form method="POST" action="/logout">
+                                            @csrf
+                                            <button type="submit"
+                                                class="w-full text-left block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</button>
+                                        </form>
+                                    </ul>
+                                </div>
+
+
+
                             @endguest
                         </div>
                     </div>
